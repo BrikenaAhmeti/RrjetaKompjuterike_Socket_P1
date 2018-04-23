@@ -13,9 +13,12 @@ def IPADDR():
 def PORTNR():          
     return(PORTN)
 
-def HOST():              
+def HOST():     
+    try:
      HOSTNAME=socket.gethostname()
      return(str(HOSTNAME))
+    except Exception:
+        return ('')
 
 def TIME():              
    return(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -136,26 +139,42 @@ def ConvertCurrency(s,n):
 def kontrollo(var):
     if var.lower()=='ip':
         ip=IPADDR()
-        return(ip)
+        if len(ip)<=116:
+           return(ip)
+        else:
+            return ('')
     elif var.lower()=='port':
         port=PORTNR()
-        return(port)
+        if len(port)<=116:
+           return(port)
+        else:
+            return ('')
     elif re.match('(zanore) ([a-z ])+',var.lower()):
         ndarja=(var.lower()).split(" ",1)
         zanoret=ZANORE(ndarja[1])
-        return(zanoret)
+        if len(zanoret)<=116:
+           return(zanoret)
+        else:
+            return ('')
     elif re.match('(printo) ([a-z 0-9!@#$%^&.,;])+',var.lower()):
         ndarja=var.split(" ",1)
         teksti=PRINTO(ndarja[1])
         return(teksti)
     elif var.lower()=='time':
         time=TIME()
-        return(time)
+        if len(time)<=116:
+           return(time)
+        else:
+            return('')
     elif var.lower()=='loja':
         loja=LOJA()
         return(loja)
     elif var.lower()=='host':
-        return(HOST())
+        host=HOST()
+        if len(host)<=116:
+           return(host)
+        else:
+            return ('')
     elif re.match('(konverto) ([a-z]+) [0-9]+',var.lower()):
         ndarja = (var.lower()).split()
         if ndarja[1]=='celsiustokelvin' or ndarja[1]=='celsiustofahrenheit' or ndarja[1]=='kelvintofahrenheit' or ndarja[1]=='kelvintocelsius' or ndarja[1]=='fahrenheittocelsius' or ndarja[1]=='fahrenheittokelvin' or ndarja[1]=='poundtokilogram' or ndarja[1]=='KilogramToPound':
@@ -230,7 +249,8 @@ def client_thread(conn):
         if dhena1!='':
            E_dhena_e_kontrolluar="Pergjigjja: "+dhena1
            conn.sendall(E_dhena_e_kontrolluar.encode('utf-8'))
-       
+        else:
+           conn.sendall("Pergjigjja nuk mund te gjendet".encode('utf-8'))
     conn.close()
 
 while True:
