@@ -132,7 +132,7 @@ def ConvertCurrency(s,n):
    elif s.lower()=='eurotobrl':
       brl=int(n)/0.242
       return(str(round(brl,2)))
-   elif s.lower()=='brlroeuro':
+   elif s.lower()=='brltoeuro':
       euro=int(n)*0.242
       return(str(round(euro,2)))
 
@@ -203,6 +203,7 @@ def kontrollo(var):
             return ('')
     else:
         return('')
+
 class Broker():
 
     def __init__(self):
@@ -227,11 +228,9 @@ class Broker():
                   if e_dhena!='':
                          E_dhena_ekontrolluar="Pergjigjja: "+e_dhena
                          self.sock.sendto(E_dhena_ekontrolluar.encode("utf-8"), ip)
-                  else:
-                       self.sock.sendto("Pergjigjja nuk mund te kthehet".encode("utf-8"), ip)         
-
+                
     def listen_clients(self):
-        try:
+       
          while True:
             msg, client = self.sock.recvfrom(1024)
             print('Duke komunikuar me '+str(client[0])+" : "+str(client[1]))
@@ -241,12 +240,10 @@ class Broker():
             if e_dhena!='':
                      E_dhena_ekontrolluar="Pergjigjja: "+e_dhena
                      self.sock.sendto(E_dhena_ekontrolluar.encode("utf-8"), client)
-            else:
-                    self.sock.sendto("Pergjigjja nuk mund te kthehet".encode("utf-8"), ip)         
+            
             t = threading.Thread(target=self.talkToClient, args=(client,))
             t.start()
-        except Exception:
-            print("Nuk mund te lidhet")
+    
 if __name__ == '__main__':
     
 
